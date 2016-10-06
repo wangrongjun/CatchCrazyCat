@@ -1,0 +1,5 @@
+include ':app'
+include ':MyLib'
+project(':MyLib').projectDir = new File('../MyLib/')
+include ':MyLib:java_lib'
+include ':MyLib:android_lib'
