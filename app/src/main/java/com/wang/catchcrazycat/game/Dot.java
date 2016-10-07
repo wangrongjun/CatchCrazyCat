@@ -1,4 +1,4 @@
-package com.wang.catchcrazycat;
+package com.wang.catchcrazycat.game;
 
 /**
  * by 王荣俊 on 2016/10/6.

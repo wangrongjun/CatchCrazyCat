@@ -1,4 +1,4 @@
-package com.wang.catchcrazycat;
+package com.wang.catchcrazycat.game;
 
 import com.wang.java_util.MathUtil;
 import com.wang.java_util.PairList;
@@ -83,7 +83,7 @@ public class DotManager {
 //        只有一个方向可以走
         if (availableDirectoryList.size() == 1) {
             moveCat(availableDirectoryList.get(0));
-            Util.toast("只有一个方向可以走");
+//            Util.toast("只有一个方向可以走");
             return STATE_CONTINUE;
         }
 
@@ -127,10 +127,10 @@ public class DotManager {
         }
         if (minPositiveDistance < 999) {//存在没有路障的方向
             moveCat(minPositiveDirectory);
-            Util.toast("没有路障的方向，到边界距离：" + minPositiveDistance);
+//            Util.toast("没有路障的方向，到边界距离：" + minPositiveDistance);
         } else {
             moveCat(minNegativeDirectory);
-            Util.toast("有路障的方向，到路障距离：" + minNegativeDistance);
+//            Util.toast("有路障的方向，到路障距离：" + minNegativeDistance);
         }
 
         return STATE_CONTINUE;
@@ -152,17 +152,15 @@ public class DotManager {
         }
 
         int distance = 0;
-        Dot neighbourhood = getNeighbourhood(dot, directory);
+        Dot neighbourhood = dot;
         while (!atEdge(neighbourhood)) {
-            assert neighbourhood != null;
+            distance++;
+            neighbourhood = getNeighbourhood(neighbourhood, directory);
             if (neighbourhood.getState() == Dot.State_Block) {
                 distance = -distance;
                 return distance;
             }
-            distance++;
-            neighbourhood = getNeighbourhood(neighbourhood, directory);
         }
-        distance++;
         return distance;
     }
 

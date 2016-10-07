@@ -30,9 +30,26 @@
 
     </RelativeLayout>
 
-    <com.wang.catchcrazycat.Playground
-        android:id="@+id/play_ground"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_playground"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </LinearLayout>
+
+        <com.wang.catchcrazycat.view.Playground
+            android:id="@+id/play_ground"
+            android:layout_width="match_parent"
+            android:layout_height="350dp" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

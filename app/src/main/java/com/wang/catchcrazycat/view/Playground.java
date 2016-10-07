@@ -1,9 +1,9 @@
-package com.wang.catchcrazycat;
+package com.wang.catchcrazycat.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -12,9 +12,14 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import com.wang.android_lib.util.DialogUtil;
+import com.wang.catchcrazycat.game.Dot;
+import com.wang.catchcrazycat.game.DotManager;
 
 /**
  * by 王荣俊 on 2016/10/6.
+ * http://blog.sina.com.cn/s/blog_706c449f01011hcr.html SurfaceView设置背景透明
+ * mySurfaceView.setZOrderOnTop(true);//设置画布  背景透明
+ * mySurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
  */
 public class Playground extends SurfaceView implements View.OnTouchListener {
 
@@ -29,6 +34,9 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         super(context, attrs);
         this.context = context;
         getHolder().addCallback(callback);
+
+        setZOrderOnTop(true);//设置画布  背景透明
+        getHolder().setFormat(PixelFormat.TRANSLUCENT);
     }
 
     public void playNew() {
@@ -47,7 +55,7 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
 
     public void redraw() {
         final Canvas canvas = getHolder().lockCanvas();
-        canvas.drawColor(Color.LTGRAY);
+//        canvas.drawColor(Color.LTGRAY);
 
         final Paint paint = new Paint();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -56,23 +64,27 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
             @Override
             public boolean next(float x, float y, int dotState) {
 
-                switch (dotState) {
-                    case Dot.State_Null:
-                        paint.setColor(0xFFEEEEEE);
-                        break;
-                    case Dot.State_Block:
-                        paint.setColor(0xFFFFAA00);
-                        break;
-                    case Dot.State_Cat:
-                        paint.setColor(0xFFFF0000);
-                        break;
-                }
-                canvas.drawOval(new RectF(
+                RectF rectF = new RectF(
                         x * dotWidth,
                         y * dotWidth,
                         (x + 1) * dotWidth,
                         (y + 1) * dotWidth
-                ), paint);
+                );
+
+                switch (dotState) {
+                    case Dot.State_Null:
+                        paint.setColor(0xFF888888);
+                        canvas.drawOval(rectF, paint);
+                        break;
+                    case Dot.State_Block:
+                        paint.setColor(0xFFFFAA00);
+                        canvas.drawOval(rectF, paint);
+                        break;
+                    case Dot.State_Cat:
+                        paint.setColor(0xFFFF0000);
+                        canvas.drawOval(rectF, paint);
+                        break;
+                }
 
                 return true;
             }

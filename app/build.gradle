@@ -19,6 +19,12 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
@@ -28,4 +34,10 @@ dependencies {
 
     compile project(':MyLib:java_lib')
     compile project(':MyLib:android_lib')
+
+    compile project(':ExtraLib:material_dialog')
+    compile project(':ExtraLib:sliding_menu')
+    compile(name: 'slidingmenu', ext: 'aar')
+
+    compile(name: 'bmob-sdk-3.5.1', ext: 'aar')
 }
