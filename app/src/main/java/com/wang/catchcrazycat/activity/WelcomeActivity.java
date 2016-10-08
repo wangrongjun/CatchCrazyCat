@@ -45,7 +45,7 @@ public class WelcomeActivity extends Activity {
             public void run() {
                 handler.sendEmptyMessage(0);
             }
-        }, 1500);
+        }, 2000);
     }
 
     @Override

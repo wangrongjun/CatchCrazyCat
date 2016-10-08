@@ -22,9 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:text="power by 王荣俊"
+        android:layout_marginBottom="12dp"
+        android:text="作者：王荣俊"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

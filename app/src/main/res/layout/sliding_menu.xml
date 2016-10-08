@@ -70,7 +70,7 @@
         android:background="@color/gray" />
 
     <LinearLayout
-        android:id="@+id/btn_challenge_again"
+        android:id="@+id/btn_menu_challenge_again"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/btn_trans_gray_selector"
