@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:paddingBottom="100dp">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_player_name"
@@ -13,8 +12,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
         android:text="玩家名"
-        android:textColor="@color/orange_dark"
-        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -33,10 +32,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:text="封神榜"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/orange_dark"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -57,10 +56,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:text="选择等级"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/orange_dark"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -81,10 +80,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:text="游戏说明"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/orange_dark"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -105,10 +104,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:text="关于"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/orange_dark"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
     </LinearLayout>

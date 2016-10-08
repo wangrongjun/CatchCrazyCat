@@ -24,17 +24,17 @@ public class P extends PrefUtil {
         return pref.getString("playerName", "");
     }
 
-    public static void setMaxLevel(int maxLevel) {
+    public static void setPlayerMaxLevel(int playerMaxLevel) {
         SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
-        pref.edit().putInt("maxLevel", maxLevel).apply();
+        pref.edit().putInt("playerMaxLevel", playerMaxLevel).apply();
     }
 
     /**
      * 玩家已经成功通过的最高等级
      */
-    public static int getMaxLevel() {
+    public static int getPlayerMaxLevel() {
         SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
-        return pref.getInt("maxLevel", LevelRule.getNoneLevel());
+        return pref.getInt("playerMaxLevel", LevelRule.getNoneLevel());
     }
 
     /**

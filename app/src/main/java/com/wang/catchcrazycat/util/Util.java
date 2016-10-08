@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.wang.android_lib.util.M;
+import com.wang.android_lib.util.NotificationUtil;
 import com.wang.android_lib.util.ScreenUtil;
 import com.wang.catchcrazycat.R;
 
@@ -32,7 +33,7 @@ public class Util {
 //        设置滑动菜单的阴影效果图
 //        menu.setShadowDrawable(R.drawable.ic_loading);
 //        设置菜单的宽度或离屏幕的偏移量，这两个都是设置滑动菜单视图的宽度，二选一
-        menu.setBehindWidth((int) (ScreenUtil.getScreenWidth(activity) * 0.5));
+        menu.setBehindWidth((int) (ScreenUtil.getScreenWidth(activity) * 0.6));
 //        menu.setBehindOffset(200);
 //        设置是否渐入渐出效果以及其值
         menu.setFadeEnabled(true);
@@ -81,6 +82,17 @@ public class Util {
         builder.setPositiveButton("重来", replayListener);
         builder.setNegativeButton("返回", null);
         builder.create().show();
+    }
+
+    public static void showNotification(Context context, String message) {
+        NotificationUtil.showNotification(
+                context,
+                0,
+                R.mipmap.app_icon,
+                context.getResources().getString(R.string.app_name),
+                message,
+                false
+        );
     }
 
 }

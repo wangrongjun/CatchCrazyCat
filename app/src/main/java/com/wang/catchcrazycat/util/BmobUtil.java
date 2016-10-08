@@ -60,7 +60,8 @@ public class BmobUtil {
                         startUploadLevel(context, playerName, level);
                     } else {
                         String hint = BmobUtil.getExceptionHint("上传成绩失败", e);
-                        M.t(context, hint);
+                        M.t(context, "上传成绩失败");
+                        Util.showNotification(context, hint);
                     }
                 }
             });
@@ -79,7 +80,8 @@ public class BmobUtil {
                     M.t(context, "等级已上传，您可以查看封神榜的排名");
                 } else {
                     String hint = BmobUtil.getExceptionHint("上传成绩失败了", e);
-                    M.t(context, hint);
+                    M.t(context, "上传成绩失败了");
+                    Util.showNotification(context, hint);
                 }
             }
         });

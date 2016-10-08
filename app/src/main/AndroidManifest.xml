@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,8 +30,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.WelcomeActivity" />
-        <activity android:name=".activity.LevelListActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.PlayerLevelListActivity" />
         <activity android:name=".activity.ChooseLevelActivity" />
 
     </application>

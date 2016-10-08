@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.wang.android_lib.util.DialogUtil;
+import com.wang.android_lib.util.DoubleClickToExit;
 import com.wang.catchcrazycat.R;
 import com.wang.catchcrazycat.game.LevelRule;
 import com.wang.catchcrazycat.util.P;
@@ -43,6 +43,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public static final String ACTION_MAX_LEVEL_CHANGED = "com.wang.action.max_level_changed";
     public static final String ACTION_CURRENT_LEVEL_CHANGED = "com.wang.action.current_level_changed";
     public static final String ACTION_SHOW_PLAYER_NAME = "com.wang.action.show_player_name";
+    public static final String ACTION_CHANGE_CURRENT_LEVEL = "com.wang.action.change_current_level";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initBroadCast() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_STEP_CHANGED);
+        filter.addAction(ACTION_MAX_LEVEL_CHANGED);
+        filter.addAction(ACTION_CURRENT_LEVEL_CHANGED);
+        filter.addAction(ACTION_SHOW_PLAYER_NAME);
+        filter.addAction(ACTION_CHANGE_CURRENT_LEVEL);
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -76,14 +83,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     case ACTION_SHOW_PLAYER_NAME:
                         tvPlayerName.setText(P.getPlayerName());
                         break;
+                    case ACTION_CHANGE_CURRENT_LEVEL:
+                        int newLevel = intent.getIntExtra("newLevel", LevelRule.getMinLevel());
+                        playground.setCurrentLevelAndPlay(newLevel);
+                        break;
                 }
             }
         };
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_STEP_CHANGED);
-        filter.addAction(ACTION_MAX_LEVEL_CHANGED);
-        filter.addAction(ACTION_CURRENT_LEVEL_CHANGED);
-        filter.addAction(ACTION_SHOW_PLAYER_NAME);
         registerReceiver(receiver, filter);
     }
 
@@ -108,7 +114,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_menu_level_list://侧滑菜单的封神榜按钮
                 break;
             case R.id.btn_menu_choose_level://侧滑菜单的选择等级按钮
-                chooseLevel();
+                startActivity(new Intent(this, ChooseLevelActivity.class));
                 slidingMenu.toggle();
                 break;
             case R.id.btn_menu:
@@ -128,17 +134,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void chooseLevel() {
-        DialogUtil.showInputDialog(this, "选择等级", "输入等级数字1-13", "1", new DialogUtil.OnInputFinishListener() {
-            @Override
-            public void onInputFinish(String text) {
-                try {
-                    playground.setCurrentLevelAndPlay(Integer.parseInt(text));
-                } catch (NumberFormatException e) {
-                    Toast.makeText(MainActivity.this, "不是数字", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return DoubleClickToExit.onKeyDown(keyCode, event, this) || super.onKeyDown(keyCode, event);
     }
-
 }

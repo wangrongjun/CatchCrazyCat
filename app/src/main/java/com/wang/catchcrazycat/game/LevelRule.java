@@ -32,14 +32,14 @@ public class LevelRule {
         return LEVEL_斗帝;
     }
 
-    public static int getLevelTotalCount() {
-        return 13;
+    public static int getBlockNumber(int level) {
+        return 70;
     }
 
     /**
      * @return 一开始随机出现的路障数目
      */
-    public static int getBlockNumber(int level) {
+    public static int getBlockNumber111(int level) {
         switch (level) {
             case LevelRule.LEVEL_斗之气初级:
                 return 50;

@@ -16,7 +16,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * by 王荣俊 on 2016/10/8.
  */
-public class LevelListActivity extends Activity {
+public class PlayerLevelListActivity extends Activity {
 
     private void query() {
 
@@ -33,7 +33,7 @@ public class LevelListActivity extends Activity {
                 } else {
                     content = e.toString();
                 }
-                NotificationUtil.showNotification(LevelListActivity.this, 1, "Log", content);
+                NotificationUtil.showNotification(PlayerLevelListActivity.this, 1, "Log", content);
             }
         });
 

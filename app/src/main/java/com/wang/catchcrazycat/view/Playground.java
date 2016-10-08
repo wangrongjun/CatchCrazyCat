@@ -46,12 +46,12 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         this.context = context;
         getHolder().addCallback(callback);
 
-        currentLevel = P.getMaxLevel() + 1;//默认情况下挑战最新的未挑战成功的等级
-        if (currentLevel == LevelRule.getMaxLevel()) {
+        currentLevel = P.getPlayerMaxLevel() + 1;//默认情况下挑战最新的未挑战成功的等级
+        if (currentLevel > LevelRule.getMaxLevel()) {
             currentLevel--;
         }
         sendCurrentLevelChangedBroadcast();
-        sendMaxLevelChangedBroadcast(P.getMaxLevel());
+        sendMaxLevelChangedBroadcast(P.getPlayerMaxLevel());
 
         setZOrderOnTop(true);//设置画布  背景透明
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -114,10 +114,15 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         getHolder().unlockCanvasAndPost(canvas);
     }
 
+    private boolean isSurfaceCreated = false;
+
     SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            playNew();
+            if (!isSurfaceCreated) {
+                playNew();
+                isSurfaceCreated = true;
+            }
         }
 
         @Override
@@ -198,13 +203,13 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
 
     private void handleWin() {
 
-        if (P.getMaxLevel() < currentLevel) {
-            P.setMaxLevel(currentLevel);
+        if (P.getPlayerMaxLevel() < currentLevel) {
+            P.setPlayerMaxLevel(currentLevel);
             sendMaxLevelChangedBroadcast(currentLevel);
         }
 
         //若大于等于斗皇，并且当前等级就是最高等级，可以记录到榜单上
-        if (currentLevel >= LevelRule.LEVEL_斗皇 && P.getMaxLevel() == currentLevel) {
+        if (currentLevel >= LevelRule.LEVEL_斗皇 && P.getPlayerMaxLevel() == currentLevel) {
             if (!TextUtil.isEmpty(P.getPlayerName())) {//若已经设置了玩家名，可以直接上传成绩
                 BmobUtil.startDeleteOldIfExistsAndUploadLevel(context, P.getPlayerName(), currentLevel);
                 showWinDialogAndQueryNext();
@@ -259,7 +264,7 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
     public void playNextLevel(boolean allowHigherThanMaxLevel) {
 
         if (!allowHigherThanMaxLevel) {
-            if (currentLevel > P.getMaxLevel()) {//若当前等级比玩家达到的最高等级还高一级，就不能下一级了。
+            if (currentLevel > P.getPlayerMaxLevel()) {//若当前等级比玩家达到的最高等级还高一级，就不能下一级了。
                 M.t(context, "请先挑战当前等级");
                 return;
             }
