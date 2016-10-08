@@ -32,15 +32,19 @@ public class LevelRule {
         return LEVEL_斗帝;
     }
 
+
     //TODO 测试用，之后删除
-    public static int getBlockNumber(int level) {
-        return 70;
-    }
+    public static boolean simple = false;
 
     /**
      * @return 一开始随机出现的路障数目
      */
-    public static int getBlockNumber111(int level) {
+    public static int getBlockNumber(int level) {
+
+        if (simple) {
+            return 80;
+        }
+
         switch (level) {
             case LevelRule.LEVEL_斗之气初级:
                 return 50;

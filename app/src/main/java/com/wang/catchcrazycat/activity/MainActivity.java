@@ -110,6 +110,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         slidingMenu.findViewById(R.id.btn_menu_challenge_again).setOnClickListener(this);
         slidingMenu.findViewById(R.id.btn_menu_game_description).setOnClickListener(this);
         slidingMenu.findViewById(R.id.btn_menu_about).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.btn_menu_test).setOnClickListener(this);
         tvPlayerName = (TextView) slidingMenu.findViewById(R.id.tv_player_name);
         tvPlayerName.setText(P.getPlayerName());
     }
@@ -136,6 +137,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_menu_about://侧滑菜单的关于按钮
                 startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case R.id.btn_menu_test:
+                if (LevelRule.simple) {
+                    LevelRule.simple = false;
+                } else {
+                    LevelRule.simple = true;
+                }
+                slidingMenu.toggle();
                 break;
         }
 
