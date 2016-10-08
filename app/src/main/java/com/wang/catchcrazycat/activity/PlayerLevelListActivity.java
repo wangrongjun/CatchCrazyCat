@@ -2,9 +2,9 @@ package com.wang.catchcrazycat.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ListView;
 
-import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
 import com.wang.catchcrazycat.R;
 import com.wang.catchcrazycat.adapter.PlayerLevelListAdapter;
@@ -30,17 +30,31 @@ public class PlayerLevelListActivity extends Activity {
 
     @Bind(R.id.lv_player_level_list)
     ListView lvPlayerLevelList;
+    @Bind(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_level_list);
         ButterKnife.bind(this);
+        initSwipeRefresh();
         startGetPlayerLevelList();
     }
 
+    private void initSwipeRefresh() {
+        swipeRefresh.setColorSchemeResources(R.color.blue_sky, R.color.orange_dark);
+        swipeRefresh.measure(0, 0);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                startGetPlayerLevelList();
+            }
+        });
+    }
+
     private void startGetPlayerLevelList() {
-        DialogUtil.showProgressDialog(this, "获取中");
+        swipeRefresh.setRefreshing(true);
         BmobQuery<Player> query = new BmobQuery<>();
         query.setLimit(500);
         query.order("-level,-createdAt");
@@ -48,7 +62,7 @@ public class PlayerLevelListActivity extends Activity {
         query.findObjects(new FindListener<Player>() {
             @Override
             public void done(List<Player> players, BmobException e) {
-                DialogUtil.cancelProgressDialog();
+                swipeRefresh.setRefreshing(false);
                 if (e == null) {
                     handlePlayers(players);
                     showPlayerLevelList(players);
