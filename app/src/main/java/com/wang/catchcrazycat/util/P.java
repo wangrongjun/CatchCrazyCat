@@ -50,4 +50,8 @@ public class P extends PrefUtil {
         return pref.getString("playerObjectId", null);
     }
 
+    public static void clear() {
+        clear(context, prefName);
+    }
+
 }

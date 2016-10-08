@@ -32,6 +32,7 @@ public class LevelRule {
         return LEVEL_斗帝;
     }
 
+    //TODO 测试用，之后删除
     public static int getBlockNumber(int level) {
         return 70;
     }
@@ -79,8 +80,9 @@ public class LevelRule {
                 return 30;
             case LevelRule.LEVEL_斗帝:
                 return 20;
+            default:
+                return Integer.MAX_VALUE;
         }
-        return Integer.MAX_VALUE;
     }
 
     public static String getLevelString(int level) {
@@ -113,10 +115,14 @@ public class LevelRule {
                 return "斗圣";
             case LevelRule.LEVEL_斗帝:
                 return "斗帝";
+            default:
+                return "error";
         }
-        return "error";
     }
 
+    /**
+     * 获取每个等级的说明
+     */
     public static String getLevelDescription(int level) {
         String levelDescription = "初始路障" + LevelRule.getBlockNumber(level) + "个";
         if (level >= LevelRule.LEVEL_斗尊) {
@@ -124,6 +130,33 @@ public class LevelRule {
             levelDescription += ",步数限制" + maxStep + "步";
         }
         return levelDescription;
+    }
+
+    /**
+     * 获取可以登榜的最低等级
+     */
+    public static int getShowPlayerListMinLevel() {
+        return LevelRule.LEVEL_斗皇;
+    }
+
+    /**
+     * 获取每个等级会在封神榜上显示的玩家数量
+     */
+    public static int getPlayerNumber(int level) {
+        switch (level) {
+            case LevelRule.LEVEL_斗帝:
+                return 1;
+            case LevelRule.LEVEL_斗圣:
+                return 3;
+            case LevelRule.LEVEL_斗尊:
+                return 5;
+            case LevelRule.LEVEL_斗宗:
+                return 7;
+            case LevelRule.LEVEL_斗皇:
+                return 9;
+            default:
+                return 0;
+        }
     }
 
 }

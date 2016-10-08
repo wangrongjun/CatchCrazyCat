@@ -70,6 +70,30 @@
         android:background="@color/gray" />
 
     <LinearLayout
+        android:id="@+id/btn_challenge_again"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/btn_trans_gray_selector"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="重新挑战"
+            android:textColor="@color/orange_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
+    <LinearLayout
         android:id="@+id/btn_menu_game_description"
         android:layout_width="match_parent"
         android:layout_height="50dp"

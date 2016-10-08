@@ -17,6 +17,7 @@ import com.wang.catchcrazycat.game.LevelRule;
 import com.wang.catchcrazycat.util.P;
 import com.wang.catchcrazycat.util.Util;
 import com.wang.catchcrazycat.view.Playground;
+import com.wang.common_lib.MaterialDialogUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,9 +77,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         tvCurrentLevelDescription.setText(LevelRule.getLevelDescription(currentLevel));
                         break;
                     case ACTION_MAX_LEVEL_CHANGED:
-                        int maxLevel = intent.getIntExtra("maxLevel", 0);
-                        tvMaxLevel.setText(LevelRule.getLevelString(maxLevel) +
-                                "(" + maxLevel + ")");
+                        int maxLevel = P.getPlayerMaxLevel();
+                        tvMaxLevel.setText(LevelRule.getLevelString(maxLevel) + "(" + maxLevel + ")");
                         break;
                     case ACTION_SHOW_PLAYER_NAME:
                         tvPlayerName.setText(P.getPlayerName());
@@ -104,17 +104,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         slidingMenu.setBackgroundResource(R.mipmap.bg_welcome);
         slidingMenu.findViewById(R.id.btn_menu_level_list).setOnClickListener(this);
         slidingMenu.findViewById(R.id.btn_menu_choose_level).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.btn_challenge_again).setOnClickListener(this);
         tvPlayerName = (TextView) slidingMenu.findViewById(R.id.tv_player_name);
         tvPlayerName.setText(P.getPlayerName());
     }
 
-    @OnClick({R.id.btn_menu, R.id.btn_play_new, R.id.btn_test, R.id.btn_previous_level, R.id.btn_next_level})
+    @OnClick({R.id.btn_menu, R.id.btn_play_new, R.id.btn_previous_level, R.id.btn_next_level})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_menu_level_list://侧滑菜单的封神榜按钮
+                startActivity(new Intent(this, PlayerLevelListActivity.class));
                 break;
             case R.id.btn_menu_choose_level://侧滑菜单的选择等级按钮
                 startActivity(new Intent(this, ChooseLevelActivity.class));
+                slidingMenu.toggle();
+                break;
+            case R.id.btn_challenge_again://侧滑菜单的重新挑战按钮按钮
+                challengeAgain();
                 slidingMenu.toggle();
                 break;
             case R.id.btn_menu:
@@ -129,9 +135,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_play_new:
                 playground.playNew();
                 break;
-            case R.id.btn_test:
-                break;
         }
+    }
+
+    private void challengeAgain() {
+        MaterialDialogUtil.showConfirm(this, "重新挑战", "重新挑战将会清空过关记录，是否重新挑战？",
+                new MaterialDialogUtil.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick() {
+                        P.clear();
+                        playground.setCurrentLevelAndPlay(LevelRule.getMinLevel());
+                    }
+                });
     }
 
     @Override

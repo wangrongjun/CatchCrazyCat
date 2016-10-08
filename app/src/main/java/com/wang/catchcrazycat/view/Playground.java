@@ -51,7 +51,7 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
             currentLevel--;
         }
         sendCurrentLevelChangedBroadcast();
-        sendMaxLevelChangedBroadcast(P.getPlayerMaxLevel());
+        sendMaxLevelChangedBroadcast();
 
         setZOrderOnTop(true);//设置画布  背景透明
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -205,11 +205,12 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
 
         if (P.getPlayerMaxLevel() < currentLevel) {
             P.setPlayerMaxLevel(currentLevel);
-            sendMaxLevelChangedBroadcast(currentLevel);
+            sendMaxLevelChangedBroadcast();
         }
 
-        //若大于等于斗皇，并且当前等级就是最高等级，可以记录到榜单上
-        if (currentLevel >= LevelRule.LEVEL_斗皇 && P.getPlayerMaxLevel() == currentLevel) {
+        //若大于等于可以登榜的最低等级，并且当前等级就是最高等级，可以记录到榜单上
+        if (currentLevel >= LevelRule.getShowPlayerListMinLevel() && P.getPlayerMaxLevel() == currentLevel) {
+
             if (!TextUtil.isEmpty(P.getPlayerName())) {//若已经设置了玩家名，可以直接上传成绩
                 BmobUtil.startDeleteOldIfExistsAndUploadLevel(context, P.getPlayerName(), currentLevel);
                 showWinDialogAndQueryNext();
@@ -248,6 +249,8 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
     public void setCurrentLevelAndPlay(int currentLevel) {
         this.currentLevel = currentLevel;
         sendCurrentLevelChangedBroadcast();
+        sendMaxLevelChangedBroadcast();//重新挑战时会用到
+        sendShowPlayerNameBroadcast();//重新挑战时会用到
         playNew();
     }
 
@@ -285,9 +288,8 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         context.sendBroadcast(intent);
     }
 
-    private void sendMaxLevelChangedBroadcast(int maxLevel) {
+    private void sendMaxLevelChangedBroadcast() {
         Intent intent = new Intent(MainActivity.ACTION_MAX_LEVEL_CHANGED);
-        intent.putExtra("maxLevel", maxLevel);
         context.sendBroadcast(intent);
     }
 
