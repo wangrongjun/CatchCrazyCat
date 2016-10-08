@@ -1,11 +1,14 @@
 package com.wang.catchcrazycat.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.util.ScreenUtil;
+import com.wang.catchcrazycat.R;
 
 /**
  * by 王荣俊 on 2016/10/7.
@@ -58,6 +61,26 @@ public class Util {
 //        menu.setOnClosedListener(null);
 
         return menu;
+    }
+
+    public static void showWinDialog(Context context, DialogInterface.OnClickListener playNextListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("恭喜恭喜");
+        builder.setMessage("恭喜你！你过关了！");
+        builder.setIcon(R.mipmap.app_icon);
+        builder.setPositiveButton("挑战下一关", playNextListener);
+        builder.setNegativeButton("返回", null);
+        builder.create().show();
+    }
+
+    public static void showLossDialog(Context context, DialogInterface.OnClickListener replayListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Sorry...");
+        builder.setMessage("对不起，你输了。");
+        builder.setIcon(R.mipmap.app_icon);
+        builder.setPositiveButton("重来", replayListener);
+        builder.setNegativeButton("返回", null);
+        builder.create().show();
     }
 
 }

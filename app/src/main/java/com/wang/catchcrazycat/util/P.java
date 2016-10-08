@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.wang.android_lib.util.PrefUtil;
-import com.wang.catchcrazycat.bean.Player;
+import com.wang.catchcrazycat.game.LevelRule;
 
 /**
  * by 王荣俊 on 2016/10/7.
@@ -29,9 +29,25 @@ public class P extends PrefUtil {
         pref.edit().putInt("maxLevel", maxLevel).apply();
     }
 
+    /**
+     * 玩家已经成功通过的最高等级
+     */
     public static int getMaxLevel() {
         SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
-        return pref.getInt("maxLevel", Player.LEVEL_斗之气初级);
+        return pref.getInt("maxLevel", LevelRule.getNoneLevel());
+    }
+
+    /**
+     * 删除该玩家记录时有用
+     */
+    public static void setPlayerObjectId(String playerObjectId) {
+        SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        pref.edit().putString("playerObjectId", playerObjectId).apply();
+    }
+
+    public static String getPlayerObjectId() {
+        SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        return pref.getString("playerObjectId", null);
     }
 
 }

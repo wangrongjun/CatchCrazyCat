@@ -1,6 +1,8 @@
 package com.wang.catchcrazycat.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
@@ -11,9 +13,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import com.wang.android_lib.util.DialogUtil;
+import com.wang.android_lib.util.M;
+import com.wang.catchcrazycat.activity.MainActivity;
 import com.wang.catchcrazycat.game.Dot;
 import com.wang.catchcrazycat.game.DotManager;
+import com.wang.catchcrazycat.game.LevelRule;
+import com.wang.catchcrazycat.util.BmobUtil;
+import com.wang.catchcrazycat.util.P;
+import com.wang.catchcrazycat.util.Util;
+import com.wang.common_lib.MaterialDialogUtil;
+import com.wang.java_util.TextUtil;
 
 /**
  * by 王荣俊 on 2016/10/6.
@@ -25,8 +34,10 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
 
     private Context context;
     private int dotWidth;
-    public int playgroundSize = 11;
-    public int blockNumber = 0;
+    private int playgroundSize = 11;
+
+    private int step = 0;//已经行走的步数
+    private int currentLevel;
 
     private DotManager manager;
 
@@ -35,17 +46,27 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         this.context = context;
         getHolder().addCallback(callback);
 
+        currentLevel = P.getMaxLevel() + 1;//默认情况下挑战最新的未挑战成功的等级
+        if (currentLevel == LevelRule.getMaxLevel()) {
+            currentLevel--;
+        }
+        sendCurrentLevelChangedBroadcast();
+        sendMaxLevelChangedBroadcast(P.getMaxLevel());
+
         setZOrderOnTop(true);//设置画布  背景透明
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
     }
 
     public void playNew() {
+        int blockNumber = LevelRule.getBlockNumber(currentLevel);
+        step = 0;
+        sendStepChangedBroadcast();
         manager = new DotManager(playgroundSize, playgroundSize, blockNumber);
         allowTouch(true);
         redraw();
     }
 
-    public void allowTouch(boolean allowTouch) {
+    private void allowTouch(boolean allowTouch) {
         if (allowTouch) {
             setOnTouchListener(this);
         } else {
@@ -53,7 +74,7 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
         }
     }
 
-    public void redraw() {
+    private void redraw() {
         final Canvas canvas = getHolder().lockCanvas();
 //        canvas.drawColor(Color.LTGRAY);
 
@@ -125,7 +146,9 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
                     if (x * dotWidth <= event.getX() && event.getX() <= (x + 1) * dotWidth) {
                         if (dotState == Dot.State_Null) {
                             manager.setBlock((int) x, (int) y);
+                            step++;
                             move();
+                            sendStepChangedBroadcast();
                             return false;
                         }
                     }
@@ -138,19 +161,140 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
     }
 
     private void move() {
+
         int gameState = manager.calculateNextAndMoveCat();
         redraw();
+
+        //若步数已经大于当前等级允许的最大步数
+        if (LevelRule.getMaxStep(currentLevel) < step) {
+            allowTouch(false);
+            Util.showLossDialog(context, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    playNew();
+                }
+            });
+            return;
+        }
+
         switch (gameState) {
             case DotManager.STATE_WIN:
                 allowTouch(false);
-                DialogUtil.showConfirmDialog(context, "提示", "恭喜你！你赢了！", null);
+                handleWin();
                 break;
             case DotManager.STATE_LOSS:
                 allowTouch(false);
-                DialogUtil.showConfirmDialog(context, "提示", "对不起，你输了。", null);
+                Util.showLossDialog(context, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        playNew();
+                    }
+                });
                 break;
             case DotManager.STATE_CONTINUE:
                 break;
         }
     }
+
+    private void handleWin() {
+
+        if (P.getMaxLevel() < currentLevel) {
+            P.setMaxLevel(currentLevel);
+            sendMaxLevelChangedBroadcast(currentLevel);
+        }
+
+        //若大于等于斗皇，并且当前等级就是最高等级，可以记录到榜单上
+        if (currentLevel >= LevelRule.LEVEL_斗皇 && P.getMaxLevel() == currentLevel) {
+            if (!TextUtil.isEmpty(P.getPlayerName())) {//若已经设置了玩家名，可以直接上传成绩
+                BmobUtil.startDeleteOldIfExistsAndUploadLevel(context, P.getPlayerName(), currentLevel);
+                showWinDialogAndQueryNext();
+
+            } else {//否则先设置玩家名，再上传成绩同时询问是否进行下一关
+                MaterialDialogUtil.showInput(context, "英雄！请留名！", "", new MaterialDialogUtil.OnInputFinishListener() {
+                    @Override
+                    public void onInputFinish(String input) {
+                        showWinDialogAndQueryNext();
+                        if (!TextUtil.isEmpty(input)) {
+                            P.setPlayerName(input);
+                            sendShowPlayerNameBroadcast();
+                            BmobUtil.startDeleteOldIfExistsAndUploadLevel(context, P.getPlayerName(), currentLevel);
+                        }
+                    }
+                });
+            }
+
+        } else {//否则直接询问是否进行下一关
+            showWinDialogAndQueryNext();
+        }
+    }
+
+    private void showWinDialogAndQueryNext() {
+        Util.showWinDialog(context, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                playNextLevel(true);
+            }
+        });
+    }
+
+    /**
+     * 设置新的当前等级并以新的当前等级重玩
+     */
+    public void setCurrentLevelAndPlay(int currentLevel) {
+        this.currentLevel = currentLevel;
+        sendCurrentLevelChangedBroadcast();
+        playNew();
+    }
+
+    public void playPreviousLevel() {
+        if (currentLevel == LevelRule.getMinLevel()) {
+            M.t(context, "当前已经是第一级");
+            return;
+        }
+        currentLevel--;
+        sendCurrentLevelChangedBroadcast();
+        playNew();
+    }
+
+    public void playNextLevel(boolean allowHigherThanMaxLevel) {
+
+        if (!allowHigherThanMaxLevel) {
+            if (currentLevel > P.getMaxLevel()) {//若当前等级比玩家达到的最高等级还高一级，就不能下一级了。
+                M.t(context, "请先挑战当前等级");
+                return;
+            }
+        }
+
+        if (currentLevel == LevelRule.getMaxLevel()) {
+            M.t(context, "恭喜！您已经破了最高等级！");
+            return;
+        }
+        currentLevel++;
+        sendCurrentLevelChangedBroadcast();
+        playNew();
+    }
+
+    private void sendCurrentLevelChangedBroadcast() {
+        Intent intent = new Intent(MainActivity.ACTION_CURRENT_LEVEL_CHANGED);
+        intent.putExtra("currentLevel", currentLevel);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendMaxLevelChangedBroadcast(int maxLevel) {
+        Intent intent = new Intent(MainActivity.ACTION_MAX_LEVEL_CHANGED);
+        intent.putExtra("maxLevel", maxLevel);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendStepChangedBroadcast() {
+        Intent intent = new Intent(MainActivity.ACTION_STEP_CHANGED);
+        intent.putExtra("step", step);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendShowPlayerNameBroadcast() {
+        Intent intent = new Intent(MainActivity.ACTION_SHOW_PLAYER_NAME);
+        context.sendBroadcast(intent);
+    }
+
 }
