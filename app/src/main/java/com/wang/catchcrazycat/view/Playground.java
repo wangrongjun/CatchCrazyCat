@@ -249,8 +249,6 @@ public class Playground extends SurfaceView implements View.OnTouchListener {
     public void setCurrentLevelAndPlay(int currentLevel) {
         this.currentLevel = currentLevel;
         sendCurrentLevelChangedBroadcast();
-        sendMaxLevelChangedBroadcast();//重新挑战时会用到
-        sendShowPlayerNameBroadcast();//重新挑战时会用到
         playNew();
     }
 

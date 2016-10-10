@@ -8,6 +8,8 @@ import android.os.Message;
 import android.view.KeyEvent;
 
 import com.wang.catchcrazycat.R;
+import com.wang.catchcrazycat.util.P;
+import com.wang.catchcrazycat.util.Util;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +27,10 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         initHandler();
         delayStart();
+
+        P.setCanUpgrade(false);
+        P.setLatestVersion(null);
+        Util.startCheckUpdateNotShowToPlayer(getApplicationContext());
     }
 
     private void initHandler() {

@@ -56,6 +56,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initSlidingMenu();
+        checkCanUpgrade();
+    }
+
+    private void checkCanUpgrade() {
+        if (P.getCanUpgrade()) {
+            Util.showUpgradeDialog(this, P.getLatestVersion());
+            P.setCanUpgrade(false);
+        }
     }
 
     private void initBroadCast() {
@@ -139,7 +147,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.btn_menu_test:
-                test2();
+                test1();
                 break;
         }
 
@@ -188,7 +196,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 new MaterialDialogUtil.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick() {
-                        P.clear();
+                        P.setPlayerMaxLevel(LevelRule.getNoneLevel());
+                        sendBroadcast(new Intent(ACTION_MAX_LEVEL_CHANGED));
                         playground.setCurrentLevelAndPlay(LevelRule.getMinLevel());
                     }
                 });
