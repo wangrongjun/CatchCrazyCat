@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ListView;
 
 import com.wang.android_lib.util.M;
+import com.wang.android_lib.util.WindowUtil;
 import com.wang.catchcrazycat.R;
 import com.wang.catchcrazycat.adapter.PlayerLevelListAdapter;
 import com.wang.catchcrazycat.game.LevelRule;
@@ -36,6 +37,7 @@ public class PlayerLevelListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowUtil.transStateBar(this);
         setContentView(R.layout.activity_player_level_list);
         ButterKnife.bind(this);
         initSwipeRefresh();
@@ -55,6 +57,7 @@ public class PlayerLevelListActivity extends Activity {
 
     private void startGetPlayerLevelList() {
         swipeRefresh.setRefreshing(true);
+        //TODO 尝试使用相关子查询（不设置别名）
         BmobQuery<Player> query = new BmobQuery<>();
         query.setLimit(500);
         query.order("-level,-createdAt");
@@ -102,7 +105,7 @@ public class PlayerLevelListActivity extends Activity {
             items.add(new PlayerLevelListAdapter.Item(
                     LevelRule.getLevelString(player.getLevel()),
                     player.getPlayerName(),
-                    player.getCreatedAt()
+                    player.getCreatedAt().substring(0, 10)
             ));
         }
         PlayerLevelListAdapter adapter = new PlayerLevelListAdapter(this, items);
