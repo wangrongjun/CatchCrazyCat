@@ -10,22 +10,66 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_cat_big" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:text="围住神经猫"
-            android:textColor="@color/orange_dark"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_check_update"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/btn_play_new"
+                android:text="检测更新"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/ic_cat_big" />
+
+            <Button
+                android:id="@+id/btn_my_website"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/btn_play_new"
+                android:text="我的主页"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/orange_dark"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="版本号"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

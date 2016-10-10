@@ -139,12 +139,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.btn_menu_test:
-                if (LevelRule.simple) {
-                    LevelRule.simple = false;
-                } else {
-                    LevelRule.simple = true;
-                }
-                slidingMenu.toggle();
+                test2();
                 break;
         }
 
@@ -164,6 +159,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
         }
 
+    }
+
+    private void test2() {
+        throw new RuntimeException("This is a test exception");
+    }
+
+    private void test1() {
+        if (LevelRule.simple) {
+            LevelRule.simple = false;
+        } else {
+            LevelRule.simple = true;
+        }
+        slidingMenu.toggle();
     }
 
     private void showGameDescriptionDialog() {

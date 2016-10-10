@@ -1,11 +1,15 @@
 package com.wang.catchcrazycat.main;
 
 import android.app.Application;
+import android.content.Context;
 
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.beta.Beta;
+import com.tencent.bugly.crashreport.CrashReport;
+import com.wang.android_lib.util.NotificationUtil;
+import com.wang.catchcrazycat.R;
 import com.wang.catchcrazycat.util.P;
 import com.wang.catchcrazycat.util.Util;
+
+import java.util.Map;
 
 import cn.bmob.v3.Bmob;
 
@@ -22,16 +26,25 @@ public class MyApplication extends Application {
         P.context = getApplicationContext();
         Util.context = getApplicationContext();
 
-//        initBugly();
+        initCrashReport(getApplicationContext(), "900055319", true);
     }
 
-    private void initBugly() {
+    public static void initCrashReport(final Context context, String BUGLY_APP_ID, boolean isDebug) {
 
-        BuglyInit.init(getApplicationContext());
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+        strategy.setCrashHandleCallback(new CrashReport.CrashHandleCallback() {
+            @Override
+            public synchronized Map<String, String> onCrashHandleStart(int i, String s, String s1, String s2) {
+                String message = "异常类型：\n" + s + "\n\n\n" +
+                        "异常信息：\n" + s1 + "\n\n\n" + "堆栈信息：\n" + s2;
+                NotificationUtil.showNotification(
+                        context, 999, R.mipmap.app_icon,
+                        "围住神经猫 - 异常信息", message, false);
+                return super.onCrashHandleStart(i, s, s1, s2);
+            }
+        });
 
-        Beta.autoInit = true;
-        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);
-        Beta.checkUpgrade();
-
+        CrashReport.initCrashReport(context, BUGLY_APP_ID, isDebug, strategy);
     }
+
 }
