@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:maxLines="1"
+            android:maxLines="2"
             android:paddingRight="5dp"
             android:text="玩家名称"
             android:textColor="@color/white"

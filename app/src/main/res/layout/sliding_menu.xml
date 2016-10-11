@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
+        android:maxLines="2"
         android:text="玩家名"
         android:textColor="@color/blue"
         android:textSize="24sp"
@@ -147,7 +148,8 @@
         android:layout_height="50dp"
         android:background="@drawable/btn_trans_gray_selector"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

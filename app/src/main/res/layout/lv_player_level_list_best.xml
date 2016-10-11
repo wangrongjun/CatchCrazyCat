@@ -23,24 +23,19 @@
             android:layout_height="80dp"
             android:src="@mipmap/ic_player_level_list_medal_first" />
 
-        <TextView
-            android:id="@+id/tv_level_name"
-            android:layout_width="60dp"
+        <ImageView
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="等级"
-            android:textColor="@color/gold"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/ic_player_level_list_doudi" />
 
         <TextView
             android:id="@+id/tv_player_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:maxLines="1"
+            android:maxLines="2"
             android:paddingRight="5dp"
             android:text="玩家名称"
             android:textColor="@color/orange_dark"

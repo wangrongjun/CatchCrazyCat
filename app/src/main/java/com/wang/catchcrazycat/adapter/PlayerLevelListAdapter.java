@@ -102,7 +102,6 @@ public class PlayerLevelListAdapter extends BaseAdapter {
 
     private void updateBestView(BestViewHolder viewHolder, int position) {
         Item item = items.get(position);
-        viewHolder.tvLevelName.setText(item.getLevelName());
         if (item.getPlayerName().equals(playerName)) {
             viewHolder.tvPlayerName.setText(item.getPlayerName() + "(我)");
         } else {
@@ -221,8 +220,6 @@ public class PlayerLevelListAdapter extends BaseAdapter {
     static class BestViewHolder {
         @Bind(R.id.iv_medal)
         ImageView ivMedal;
-        @Bind(R.id.tv_level_name)
-        TextView tvLevelName;
         @Bind(R.id.tv_player_name)
         TextView tvPlayerName;
         @Bind(R.id.tv_create_time)
