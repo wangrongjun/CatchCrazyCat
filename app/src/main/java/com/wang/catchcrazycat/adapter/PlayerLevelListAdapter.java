@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wang.android_lib.util.ResourceUtil;
 import com.wang.catchcrazycat.R;
 
 import java.util.List;
@@ -22,13 +23,18 @@ public class PlayerLevelListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Item> items;
+    private String playerName;
 
-    private static final int TYPE_FIRST = 1;//第一项
-    private static final int TYPE_NORMAL = 2;//其他项
+    /**
+     * 注意，如果getViewTypeCount返回了2，那么getItemViewType一定要返回0，1，否则一定数组越界出错。
+     */
+    private static final int TYPE_BEST = 0;//第1,2,3项
+    private static final int TYPE_NORMAL = 1;//其他项
 
-    public PlayerLevelListAdapter(Context context, List<Item> items) {
+    public PlayerLevelListAdapter(Context context, List<Item> items, String playerName) {
         this.context = context;
         this.items = items;
+        this.playerName = playerName;
     }
 
     @Override
@@ -48,8 +54,8 @@ public class PlayerLevelListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_FIRST;
+        if (position <= 2) {
+            return TYPE_BEST;
         }
         return TYPE_NORMAL;
     }
@@ -63,18 +69,18 @@ public class PlayerLevelListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (getItemViewType(position) == TYPE_FIRST) {
+        if (getItemViewType(position) == TYPE_BEST) {
 
-            FirstViewHolder firstViewHolder;
+            BestViewHolder bestViewHolder;
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(
-                        R.layout.lv_player_level_list_first, parent, false);
-                firstViewHolder = new FirstViewHolder(convertView);
-                convertView.setTag(firstViewHolder);
+                        R.layout.lv_player_level_list_best, parent, false);
+                bestViewHolder = new BestViewHolder(convertView);
+                convertView.setTag(bestViewHolder);
             } else {
-                firstViewHolder = (FirstViewHolder) convertView.getTag();
+                bestViewHolder = (BestViewHolder) convertView.getTag();
             }
-            updateFirstView(firstViewHolder, position);
+            updateBestView(bestViewHolder, position);
 
         } else if (getItemViewType(position) == TYPE_NORMAL) {
 
@@ -94,20 +100,46 @@ public class PlayerLevelListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void updateFirstView(FirstViewHolder viewHolder, int position) {
+    private void updateBestView(BestViewHolder viewHolder, int position) {
         Item item = items.get(position);
-        viewHolder.tvPlayerName.setText(item.getPlayerName());
-        viewHolder.tvCreateTime.setText(item.getCreateTime());
+        viewHolder.tvLevelName.setText(item.getLevelName());
+        if (item.getPlayerName().equals(playerName)) {
+            viewHolder.tvPlayerName.setText(item.getPlayerName() + "(我)");
+        } else {
+            viewHolder.tvPlayerName.setText(item.getPlayerName());
+        }
+        viewHolder.tvCreateTime.setText(item.getCreateTime().replace(" ", "\n"));
+        setMedalImage(viewHolder.ivMedal, position);
     }
 
     private void updateNormalView(NormalViewHolder viewHolder, int position) {
         Item item = items.get(position);
         viewHolder.tvLevelName.setText(item.getLevelName());
-        viewHolder.tvPlayerName.setText(item.getPlayerName());
-        viewHolder.tvCreateTime.setText(item.getCreateTime());
-        position++;//等级从1排起
-        setNumberImage(viewHolder.ivNumberOne, position / 10);
-        setNumberImage(viewHolder.ivNumberTwo, position % 10);
+        if (item.getPlayerName().equals(playerName)) {
+            viewHolder.tvPlayerName.setTextColor(ResourceUtil.getColor(context, R.color.light_blue));
+            viewHolder.tvPlayerName.setText(item.getPlayerName() + "(我)");
+        } else {
+            viewHolder.tvPlayerName.setTextColor(ResourceUtil.getColor(context, R.color.white));
+            viewHolder.tvPlayerName.setText(item.getPlayerName());
+        }
+        viewHolder.tvCreateTime.setText(item.getCreateTime().replace(" ", "\n"));
+        int number = position + 1;//Item从1排起
+        setNumberImage(viewHolder.ivNumberOne, number / 10);
+        setNumberImage(viewHolder.ivNumberTwo, number % 10);
+    }
+
+    private void setMedalImage(ImageView imageView, int position) {
+        switch (position) {
+            case 0:
+                imageView.setImageResource(R.mipmap.ic_player_level_list_medal_first);
+                break;
+            case 1:
+                imageView.setImageResource(R.mipmap.ic_player_level_list_medal_second);
+                break;
+            case 2:
+                imageView.setImageResource(R.mipmap.ic_player_level_list_medal_third);
+                break;
+        }
     }
 
     private void setNumberImage(ImageView ivNumber, int number) {
@@ -169,17 +201,6 @@ public class PlayerLevelListAdapter extends BaseAdapter {
         }
     }
 
-    static class FirstViewHolder {
-        @Bind(R.id.tv_player_name)
-        TextView tvPlayerName;
-        @Bind(R.id.tv_create_time)
-        TextView tvCreateTime;
-
-        FirstViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
-
     static class NormalViewHolder {
         @Bind(R.id.iv_number_one)
         ImageView ivNumberOne;
@@ -193,6 +214,21 @@ public class PlayerLevelListAdapter extends BaseAdapter {
         TextView tvCreateTime;
 
         NormalViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class BestViewHolder {
+        @Bind(R.id.iv_medal)
+        ImageView ivMedal;
+        @Bind(R.id.tv_level_name)
+        TextView tvLevelName;
+        @Bind(R.id.tv_player_name)
+        TextView tvPlayerName;
+        @Bind(R.id.tv_create_time)
+        TextView tvCreateTime;
+
+        BestViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }

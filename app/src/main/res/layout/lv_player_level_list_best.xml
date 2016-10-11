@@ -11,22 +11,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="100dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@mipmap/ic_player_level_list_one" />
+            android:id="@+id/iv_medal"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_player_level_list_medal_first" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/tv_level_name"
             android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/ic_player_level_list_doudi" />
+            android:gravity="center"
+            android:text="等级"
+            android:textColor="@color/gold"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_player_name"
@@ -46,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.6"
+            android:maxLines="2"
             android:text="登榜时间"
             android:textColor="@color/white"
             android:textSize="12sp" />

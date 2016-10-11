@@ -149,15 +149,15 @@ public class LevelRule {
     public static int getPlayerNumber(int level) {
         switch (level) {
             case LevelRule.LEVEL_斗帝:
-                return 1;
-            case LevelRule.LEVEL_斗圣:
                 return 3;
-            case LevelRule.LEVEL_斗尊:
-                return 5;
-            case LevelRule.LEVEL_斗宗:
+            case LevelRule.LEVEL_斗圣:
                 return 7;
+            case LevelRule.LEVEL_斗尊:
+                return 11;
+            case LevelRule.LEVEL_斗宗:
+                return 15;
             case LevelRule.LEVEL_斗皇:
-                return 9;
+                return 19;
             default:
                 return 0;
         }

@@ -12,6 +12,7 @@ import com.wang.catchcrazycat.adapter.PlayerLevelListAdapter;
 import com.wang.catchcrazycat.game.LevelRule;
 import com.wang.catchcrazycat.game.Player;
 import com.wang.catchcrazycat.util.BmobUtil;
+import com.wang.catchcrazycat.util.P;
 import com.wang.catchcrazycat.util.Util;
 
 import java.util.ArrayList;
@@ -105,10 +106,10 @@ public class PlayerLevelListActivity extends Activity {
             items.add(new PlayerLevelListAdapter.Item(
                     LevelRule.getLevelString(player.getLevel()),
                     player.getPlayerName(),
-                    player.getCreatedAt().substring(0, 10)
+                    player.getCreatedAt()
             ));
         }
-        PlayerLevelListAdapter adapter = new PlayerLevelListAdapter(this, items);
+        PlayerLevelListAdapter adapter = new PlayerLevelListAdapter(this, items, P.getPlayerName());
         lvPlayerLevelList.setAdapter(adapter);
     }
 
